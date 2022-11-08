@@ -2,7 +2,7 @@ package homework;
 
 import java.util.EmptyStackException;
 
-class Stack {
+class Stack implements Stackable {
     private int mSize;
     private int[] stackArray;
     private int top;
