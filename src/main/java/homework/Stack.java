@@ -1,6 +1,9 @@
 package homework;
 
-import java.util.EmptyStackException;
+import homework.exceptions.MyStackIsEmptyException;
+import homework.exceptions.MyStackOverflowException;
+
+import java.util.Optional;
 
 class Stack implements Stackable {
     private int mSize;
@@ -13,18 +16,25 @@ class Stack implements Stackable {
         top = -1;
     }
 
-    public void addElement(int element) throws StackOverflowError {
+    public void addElement(int element) throws MyStackOverflowException {
         if (top >= mSize - 1) {
-            throw new StackOverflowError();
+            throw new MyStackOverflowException();
         }
         stackArray[++top] = element;
     }
 
-    public int deleteElement() throws EmptyStackException {
+    public int deleteElement() throws MyStackIsEmptyException {
         if (top == -1) {
-            throw new EmptyStackException();
+            throw new MyStackIsEmptyException();
         }
         return stackArray[top--];
+    }
+
+    public Optional<Integer> deleteOptionalElement() throws MyStackIsEmptyException {
+        if (top == -1) {
+            throw new MyStackIsEmptyException();
+        }
+        return Optional.of(stackArray[top--]);
     }
 
     public int readTop() {

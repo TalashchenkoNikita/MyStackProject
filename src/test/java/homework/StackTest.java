@@ -1,12 +1,16 @@
 package homework;
 
+import homework.exceptions.MyStackIsEmptyException;
+import homework.exceptions.MyStackOverflowException;
 import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.EmptyStackException;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.InstanceOfAssertFactories.OPTIONAL;
 
 class StackTest {
 
@@ -14,13 +18,13 @@ class StackTest {
 
 
     @Test
-    void shouldAddElement() {
+    void shouldAddElement() throws MyStackOverflowException {
         stack.addElement(4);
         assertThat(stack.isEmpty()).isEqualTo(false);
     }
 
     @Test
-    void shouldThrowExceptionWhenAddElement() {
+    void shouldThrowExceptionWhenAddElement() throws MyStackOverflowException {
         stack.addElement(4);
         stack.addElement(5);
         Throwable thrown = catchThrowable(() -> {
@@ -30,10 +34,23 @@ class StackTest {
     }
 
     @Test
-    void shouldDeleteElement() {
+    void shouldDeleteElement() throws MyStackOverflowException, MyStackIsEmptyException {
         stack.addElement(4);
         stack.deleteElement();
         assertThat(stack.isEmpty()).isEqualTo(true);
+    }
+
+    @Test
+    void shouldDeleteOptionalElement() throws MyStackOverflowException, MyStackIsEmptyException {
+        stack.addElement(4);
+        stack.deleteOptionalElement();
+        assertThat(stack.isEmpty()).isEqualTo(true);
+    }
+
+    @Test
+    void shouldBeOptionalElement() throws MyStackOverflowException, MyStackIsEmptyException {
+        stack.addElement(4);
+        assertThat(stack.deleteOptionalElement()).isInstanceOf(Optional.class);
     }
 
     @Test
@@ -45,7 +62,7 @@ class StackTest {
     }
 
     @Test
-    void shouldReadTop() {
+    void shouldReadTop() throws MyStackOverflowException {
         stack.addElement(4);
         assertThat(stack.readTop()).isEqualTo(4);
     }
@@ -56,9 +73,11 @@ class StackTest {
     }
 
     @Test
-    void shouldCheckIsFull() {
+    void shouldCheckIsFull() throws MyStackOverflowException {
         stack.addElement(4);
         stack.addElement(5);
         assertThat(stack.isFull()).isEqualTo(true);
     }
+
+
 }
